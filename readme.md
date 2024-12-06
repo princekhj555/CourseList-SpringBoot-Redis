@@ -22,6 +22,9 @@ This is a Spring Boot application that provides two APIs to manage course data. 
 - **Lettuce** or **Jedis**: Redis client libraries used to connect to Redis.
 - **Jackson**: For JSON serialization and deserialization.
 
+#### NOTE  :
+For now the expiry time will be set for 2 minutes, the data will be there for 2 minutes and if there is no new request **cache hit** then it will get expired and new request will be triggered to api to fetch the data and will be stored in redis for next 2 minutes again.
+
 ## API Endpoints
 
 ### 1. `GET /course/{courseId}`

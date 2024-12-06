@@ -24,7 +24,7 @@ public class CourseDao {
         log.info("Entering into CourseDAO saveRedisCourse");
         try{
             redisTemplate.opsForHash().put(KEY,course.getId().toString(),course);
-            redisTemplate.expire(KEY,10, TimeUnit.SECONDS);
+            redisTemplate.expire(KEY,120, TimeUnit.SECONDS);
         }catch (Exception ex){
             log.error("Exception into CourseDAO saveRedisCourse : {} ",ex.getMessage());
         }finally {
@@ -40,7 +40,7 @@ public class CourseDao {
             course = (Course) redisTemplate.opsForHash().get(KEY,courseId);
             if(course!=null){
                 //extending expiry
-                redisTemplate.expire(KEY, 10, TimeUnit.SECONDS);
+                redisTemplate.expire(KEY, 120, TimeUnit.SECONDS);
             }
             log.info("Value of course  into CourseDAO getRedisCourse {} ",course);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class CourseDao {
             redisTemplate.opsForList().rightPushAll(KEY_FOR_ALL, courses);
 
             // Set the expiry time for the key to 1 hour
-            redisTemplate.expire(KEY_FOR_ALL, 1, TimeUnit.MINUTES);
+            redisTemplate.expire(KEY_FOR_ALL, 2, TimeUnit.MINUTES);
             response="Saved into redis";
         }catch (Exception ex){
             log.error("Exception into CourseDAO saveALlRedisCourse : {} ",ex.getMessage());
@@ -76,7 +76,7 @@ public class CourseDao {
             // Fetch the entire list of courses from Redis
             cachedCourses = redisTemplate.opsForList().range(KEY_FOR_ALL, 0, -1);
             if(cachedCourses!=null &&  !cachedCourses.isEmpty()){
-                redisTemplate.expire(KEY_FOR_ALL, 1, TimeUnit.MINUTES);
+                redisTemplate.expire(KEY_FOR_ALL, 2, TimeUnit.MINUTES);
             }
 
         } catch (Exception e) {
